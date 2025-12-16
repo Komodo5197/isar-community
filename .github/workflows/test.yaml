@@ -15,8 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - name: Prepare Build
-        uses: ./.github/actions/prepare-build
       - name: Install Linux requirements
         run: sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
       - name: Setup headless display
@@ -52,8 +50,6 @@ jobs:
           channel: master
           flutter-version: "${{ steps.flutter-version.outputs.VERSION }}"
       - run: flutter --version
-      - name: Prepare Build
-        uses: ./.github/actions/prepare-build
       - name: Install Linux requirements
         run: |
           sudo apt-get update
