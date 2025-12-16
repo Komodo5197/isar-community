@@ -5,14 +5,14 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   integration_test:
     sdk: flutter
-  intl: any
+  intl: 0.18.0
   isar: any
   isar_flutter_libs: any
   json_annotation: ^4.7.0
@@ -20,7 +20,7 @@ dependencies:
   path: ^1.8.2
   path_provider: ^2.0.10
   test: ^1.21.4
-  test_api: any
+  test_api: ^0.4.12
 
 dev_dependencies:
   build_runner: any
@@ -37,4 +37,3 @@ dependency_overrides:
     path: ../isar_flutter_libs
   isar_generator:
     path: ../isar_generator
-  test: 1.21.5
