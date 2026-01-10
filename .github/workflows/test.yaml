@@ -64,3 +64,55 @@ jobs:
           flutter config --enable-linux-desktop
           flutter test -d linux integration_test/integration_test.dart --dart-define STRESS=true
         working-directory: packages/isar_test
+
+  integration_test_windows:
+    name: Integration Test Windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+      - name: Prepare Build
+        uses: ./.github/actions/prepare-build
+      - name: Display Rust version
+        run: rustc --version && cargo --version
+      - name: Build Isar Core
+        run: |
+          bash tool/build_windows.sh x64
+          mv isar_windows_x64.dll packages/isar_flutter_libs/windows/libisar.dll
+      - name: Prepare Tests
+        run: sh tool/prepare_tests.sh
+      - name: Run Flutter Driver tests
+        run: |
+          flutter config --enable-windows-desktop 
+          flutter test -d windows integration_test/integration_test.dart --dart-define STRESS=true
+        working-directory: packages/isar_test
+
+  integration_test_windows_arm:
+    name: Integration Test Windows ARM
+    runs-on: windows-11-arm
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Prebuilt ARM windows builds are not provided, so build flutter from source
+          channel: master
+          flutter-version: "3.3.10"
+      - run: flutter --version
+      - name: Prepare Build
+        uses: ./.github/actions/prepare-build
+      - name: Display Rust version
+        run: rustc --version && cargo --version
+      - name: Build Isar Core
+        run: |
+          bash tool/build_windows.sh aarch64
+          mv isar_windows_arm64.dll packages/isar_flutter_libs/windows/libisar.dll
+      - name: Prepare Tests
+        run: sh tool/prepare_tests.sh
+      - name: Run Flutter Driver tests
+        run: |
+          flutter config --enable-windows-desktop 
+          flutter test -d windows integration_test/integration_test.dart --dart-define STRESS=true
+        working-directory: packages/isar_test
