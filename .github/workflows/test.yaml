@@ -56,7 +56,7 @@ jobs:
       - name: Build Isar Core
         run: |
           bash tool/build_linux.sh aarch64
-          mv libisar_linux_arm64.so packages/isar_flutter_libs/linux/libisar.so
+          mv libisar_linux_arm64.so packages/isar_flutter_libs/linux/libisar.aarch64.so
       - name: Prepare Tests
         run: sh tool/prepare_tests.sh
       - name: Run Flutter Driver tests
