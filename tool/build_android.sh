@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RUST_TOOLCHAIN="1.88.0-x86_64-unknown-linux-gnu"
+
 if [[ "$(uname -s)" == "Darwin" ]]; then
     export NDK_HOST_TAG="darwin-x86_64"
 elif [[ "$(uname -s)" == "Linux" ]]; then
@@ -35,22 +37,24 @@ export AR_aarch64_linux_android=$COMPILER_DIR/llvm-ar
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$COMPILER_DIR/aarch64-linux-android21-clang
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_AR=$COMPILER_DIR/llvm-ar
 
+cd packages/isar_core_ffi
+
 if [ "$1" = "x86" ]; then
-  rustup target add i686-linux-android
-  cargo build --target i686-linux-android --release
-  mv "target/i686-linux-android/release/libisar.so" "libisar_android_x86.so"
+  rustup target add i686-linux-android --toolchain $RUST_TOOLCHAIN
+  rustup run $RUST_TOOLCHAIN cargo build --target i686-linux-android --release
+  mv "../../target/i686-linux-android/release/libisar.so" "../../libisar_android_x86.so"
 elif [ "$1" = "x64" ]; then
-  rustup target add x86_64-linux-android
-  cargo build --target x86_64-linux-android --release
-  mv "target/x86_64-linux-android/release/libisar.so" "libisar_android_x64.so"
+  rustup target add x86_64-linux-android --toolchain $RUST_TOOLCHAIN
+  rustup run $RUST_TOOLCHAIN cargo build --target x86_64-linux-android --release
+  mv "../../target/x86_64-linux-android/release/libisar.so" "../../libisar_android_x64.so"
 elif [ "$1" = "armv7" ]; then
-  rustup target add armv7-linux-androideabi
-  cargo build --target armv7-linux-androideabi  --release
-  mv "target/armv7-linux-androideabi/release/libisar.so" "libisar_android_armv7.so"
+  rustup target add armv7-linux-androideabi --toolchain $RUST_TOOLCHAIN
+  rustup run $RUST_TOOLCHAIN cargo build --target armv7-linux-androideabi --release
+  mv "../../target/armv7-linux-androideabi/release/libisar.so" "../../libisar_android_armv7.so"
 else
-  rustup target add aarch64-linux-android
-  cargo build --target aarch64-linux-android --release
-  mv "target/aarch64-linux-android/release/libisar.so" "libisar_android_arm64.so"
+  rustup target add aarch64-linux-android --toolchain $RUST_TOOLCHAIN
+  rustup run $RUST_TOOLCHAIN cargo build --target aarch64-linux-android --release
+  mv "../../target/aarch64-linux-android/release/libisar.so" "../../libisar_android_arm64.so"
 fi
 
 

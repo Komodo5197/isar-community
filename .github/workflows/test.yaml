@@ -157,4 +157,8 @@ jobs:
             arch: x86_64
             profile: pixel
             working-directory: packages/isar_test
-            script: flutter test integration_test/integration_test.dart --dart-define STRESS=true
+            disk-size: 5120M
+            script: |
+              adb logcat -c
+              adb logcat &
+              flutter test integration_test/integration_test.dart --dart-define STRESS=true
