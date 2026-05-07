@@ -116,3 +116,46 @@ jobs:
           flutter config --enable-windows-desktop 
           flutter test -d windows integration_test/integration_test.dart --dart-define STRESS=true
         working-directory: packages/isar_test
+
+  integration_test_android:
+    name: Integration Test Android
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "zulu"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+      - name: Prepare Build
+        uses: ./.github/actions/prepare-build
+      - name: Build Isar Core
+        run: |
+          bash tool/build_android.sh x64
+          bash tool/build_android.sh arm64
+          mkdir -p packages/isar_flutter_libs/android/src/main/jniLibs/x86_64
+          cp libisar_android_x64.so packages/isar_flutter_libs/android/src/main/jniLibs/x86_64/libisar.so
+      - uses: actions/upload-artifact@v6
+        with:
+          name: libisar_android_x64.so
+          path: libisar_android_x64.so
+      - uses: actions/upload-artifact@v6
+        with:
+          name: libisar_android_arm64.so
+          path: libisar_android_arm64.so
+      - name: Prepare Tests
+        run: sh tool/prepare_tests.sh
+      - name: Run Flutter Integration tests
+        continue-on-error: true
+        timeout-minutes: ${{ inputs.timeout_minutes }}
+        uses: Wandalen/wretry.action@v1.0.36
+        with:
+          action: reactivecircus/android-emulator-runner@v2
+          with: |
+            api-level: 29
+            arch: x86_64
+            profile: pixel
+            working-directory: packages/isar_test
+            script: flutter test integration_test/integration_test.dart --dart-define STRESS=true
