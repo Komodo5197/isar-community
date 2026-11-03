@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# test
+
 RUST_TOOLCHAIN="1.88.0-x86_64-unknown-linux-gnu"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
