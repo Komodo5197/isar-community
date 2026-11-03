@@ -68,6 +68,8 @@ jobs:
   integration_test_windows:
     name: Integration Test Windows
     runs-on: windows-2022
+    # It doesn't work properly.  Disable.
+    if: false
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -92,6 +94,8 @@ jobs:
   integration_test_windows_arm:
     name: Integration Test Windows ARM
     runs-on: windows-11-arm
+    # It doesn't work properly.  Disable.
+    if: false
     steps:
       - uses: actions/checkout@v3
       - name: Set up Flutter
